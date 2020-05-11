@@ -2,48 +2,52 @@
   <h2> <a href="/" class="link">Home Page</a>  | <a href="/game" class="link active">Game Page</a> </h2>
 </div>
 <div class='game-form'>
-  <div class='countdown'>
-    <p>
-      <span class='countdown-num' id="countdowntimer"></span> |
-      <button class="btn save-records"  type="button" onclick="pause_countdown();">Save</button>
-    </p>
-  </div>
-  <%= form_tag "", id: "timer-form" do %>
-    <%= hidden_field_tag "plays[timer_value]", nil, id: 'timer_value' %>
-    <%= hidden_field_tag "plays[image_url]", nil, id: 'image_url' %>
-    <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
-    <div class="row">
-      <% get_timer_array.each_with_index do |timer_data, index| %>
-        <div class="col" id= "image_box_<%= timer_data[0] %>">
-          <%= image_tag timer_data[1], width: 200, height: 200 %>
-          <%= hidden_field_tag "plays[play][][timer_value]", timer_data[0], id: "image_timer_value_#{timer_data[0]}" %>
-          <%= hidden_field_tag "plays[play][][image_url]", timer_data[1], id: "image_url_#{timer_data[0]}" %>
-          <p><%= timer_data[0] %> </p>
-        </div>
-      <% end %>
+  <% if @attachments.present? %>
+    <div class='countdown'>
+      <p>
+        <span class='countdown-num' id="countdowntimer"></span> |
+        <button class="btn save-records"  type="button" onclick="pause_countdown();">Save</button>
+      </p>
     </div>
-  <% end %>
-</div>
-<hr>
-<div class='game-form'>
-  <h1> Saved Item </h1>
-  <div class="row"  id="result-tbody">
-    <% @plays.each do |play| %>
-      <div class="col">
-        <%= image_tag play.image_url, width: 200, height: 200 %>
-        <p><%= play.timer_value %> </p>
+    <%= form_tag "", id: "timer-form" do %>
+      <%= hidden_field_tag "plays[timer_value]", nil, id: 'timer_value' %>
+      <%= hidden_field_tag "plays[image_url]", nil, id: 'image_url' %>
+      <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+      <div class="row">
+        <% get_timer_array.each_with_index do |timer_data, index| %>
+          <div class="col" id= "image_box_<%= timer_data[0] %>">
+            <%= image_tag timer_data[1], width: 200, height: 200 %>
+            <%= hidden_field_tag "plays[play][][timer_value]", timer_data[0], id: "image_timer_value_#{timer_data[0]}" %>
+            <%= hidden_field_tag "plays[play][][image_url]", timer_data[1], id: "image_url_#{timer_data[0]}" %>
+            <p><%= timer_data[0] %> </p>
+          </div>
+        <% end %>
       </div>
     <% end %>
   </div>
-</div>
+  <hr>
+  <div class='game-form'>
+    <h1> Saved Item </h1>
+    <div class="row"  id="result-tbody">
+      <% @plays.each do |play| %>
+        <div class="col">
+          <%= image_tag play.image_url, width: 200, height: 200 %>
+          <p><%= play.timer_value %> </p>
+        </div>
+      <% end %>
+    </div>
+    <script type="text/javascript">
+      // countdown timer for game-----------------
+      var timeleft = 11;
+      var downloadTimer = setInterval(function(){
+      timeleft--;
+      document.getElementById("countdowntimer").textContent = timeleft;
+      if(timeleft <= 1)
+        timeleft = 11
+      },1000);
+    </script>
 
-<script type="text/javascript">
-  // countdown timer for game-----------------
-  var timeleft = 11;
-  var downloadTimer = setInterval(function(){
-  timeleft--;
-  document.getElementById("countdowntimer").textContent = timeleft;
-  if(timeleft <= 1)
-    timeleft = 11
-  },1000);
-</script>
+  <% else %>
+    <p> No images available for Play!!! <p>
+  <% end %>
+</div>
