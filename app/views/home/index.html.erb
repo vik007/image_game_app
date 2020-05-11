@@ -1,0 +1,19 @@
+<div class='header'>
+  <h2> <a href="/" class="link active">Home Page</a>  | <a href="/game" class="link">Game Page</a> </h2>
+</div>
+<div class='image-form'>
+  <%= form_for(@attachment, :html => { :multipart => true }) do |f| %>
+     <div class='field'>
+       <p>
+          <%= f.label :images, 'Select Multiple Images' %>
+       </p>
+       <p>
+        <%= f.file_field :images, multiple: true, name: 'attachments[images][]', accept: 'image/x-png,image/gif,image/jpeg', required: true %>
+       </p>
+     </div>
+
+     <div class='actions'>
+       <%= f.submit 'Save Images', class: 'btn' %>
+     </div>
+  <% end %>
+</div>
